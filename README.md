@@ -14,3 +14,19 @@
 ]);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(parent); -->
+
+/**
+ * Header
+ *      -logo
+ *      -nav-items
+ * Body
+ *      -search
+ *      -RestrauntContainer
+ *       -RetrauntCard
+ *        -Img
+ * Footer
+ *      -copyright
+ *      -Links
+ *      -Address
+ *      -Contacts
+ */
