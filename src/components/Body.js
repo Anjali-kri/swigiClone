@@ -1,20 +1,85 @@
 import RestrauntCard from "./RestrauntCard";
-import resObj from "../utils/mockdata"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Shimmer from "./Shimmer";
 
 
 const Body = () => {
-    const [listOfRestro, setListOfRestro] = useState(resObj);
-    return (
+    const [listOfRestro, setListOfRestro] = useState([]);
+    const [filterRestaurant, setFilterRestaurant] = useState([]);
+    const [searchText, setSearchText] = useState('')
+
+    const filterTopratedRes = () => {
+        const filterData = listOfRestro.filter((res) => res.info.avgRating >= 4.5);
+        setFilterRestaurant(filterData);                    
+    }
+
+    const reset = () => {
+        setFilterRestaurant(listOfRestro);    
+    }
+
+    const filterByKeyword = (event) => {
+        const keyword = event.target.value.toLowerCase(); 
+        console.log(keyword);
+    
+        const filterData = listOfRestro.filter((ele) => ele.info.name.toLowerCase().includes(keyword));
+        setFilterRestaurant(filterData);    
+        console.log(filterData); 
+      
+    };
+
+    const filterRestrurantData = () => {
+        // const filterList = listOfRestro.filter((res) => res.info.name.toLowerCase().includes(searchText.toLowerCase()));
+        //                 setFilterRestaurant(filterList);
+
+        const filterData = listOfRestro.filter((ele) => ele.info.name.toLowerCase().includes(searchText.toLowerCase()));
+        setFilterRestaurant(filterData); 
+    }
+
+    const fetchData = async() => {
+        const data = await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9715987&lng=77.5945627&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING");
+        const json = await data.json();
+        console.log(json);
+        setListOfRestro(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+        setFilterRestaurant(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+    // consitional rendering
+    
+    // if(listOfRestro.length === 0){
+    //     return <Shimmer />
+    // }
+
+    return listOfRestro.length === 0 ? (<Shimmer />) :(
             <div className="body">
               <div className="filter">
-                <button className="filter-btn" onClick={() => {
-                    const filterData = listOfRestro.filter((res) => res.info.avgRating >= 4.5);
-                setListOfRestro(filterData);
-                }}>Top Rated Restaurant</button>
+                <div className="search">
+                    <input className="search-box" 
+                    value={searchText}
+                    onChange={(e) => {
+                        setSearchText(e.target.value);
+                    }}
+                    />
+                    <button 
+                    onClick={filterRestrurantData}
+                    >
+                        Search
+                    </button>
+                </div>
+                <button className="filter-btn" onClick={filterTopratedRes}>Top Rated Restaurant</button>
+                <button className="reset"
+                 onClick={reset}
+                 >Reset</button>
+                <input type="text"
+                name=""
+                onChange={filterByKeyword}
+                />
               </div>
               <div className="res-container">
-                {listOfRestro.map((restaurant) =><RestrauntCard key={restaurant.info.id} resData = {restaurant}/>) }                   
+                {filterRestaurant.map((restaurant) =><RestrauntCard key={restaurant.info.id} resData={restaurant} />) }                   
               </div>
             </div>
             
