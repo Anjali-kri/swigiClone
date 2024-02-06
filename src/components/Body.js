@@ -20,15 +20,15 @@ const Body = () => {
         setFilterRestaurant(listOfRestro);    
     }
 
-    const filterByKeyword = (event) => {
-        const keyword = event.target.value.toLowerCase(); 
-        console.log(keyword);
+    // const filterByKeyword = (event) => {
+    //     const keyword = event.target.value.toLowerCase(); 
+    //     console.log(keyword);
     
-        const filterData = listOfRestro.filter((ele) => ele.info.name.toLowerCase().includes(keyword));
-        setFilterRestaurant(filterData);    
-        console.log(filterData); 
+    //     const filterData = listOfRestro.filter((ele) => ele.info.name.toLowerCase().includes(keyword));
+    //     setFilterRestaurant(filterData);    
+    //     console.log(filterData); 
       
-    };
+    // };
 
     const filterRestrurantData = () => {
         // const filterList = listOfRestro.filter((res) => res.info.name.toLowerCase().includes(searchText.toLowerCase()));
@@ -63,29 +63,35 @@ const Body = () => {
     return listOfRestro.length === 0 ? (<Shimmer />) :(
             <div className="body">
               <div className="filter">
-                <div className="search">
-                    <input className="search-box" 
+                <div className="search px-2 m-2 flex">
+                    <input className="px-4 py-2 m-2 border border-solid border-black bg-slate-100" 
                     value={searchText}
                     onChange={(e) => {
                         setSearchText(e.target.value);
                     }}
                     />
-                    <button 
+                    <button className="px-4 py-2 bg-green-100 m-4 rounded-lg"
                     onClick={filterRestrurantData}
                     >
                         Search
                     </button>
+                    <button className="px-4 py-2 m-2 bg-gray-100 rounded-lg" onClick={filterTopratedRes}>Top Rated Restaurant</button>
+                    <button className="px-4 py-2 m-2 bg-gray-100 rounded-lg"
+                    onClick={reset}
+                    >Reset</button>
                 </div>
-                <button className="filter-btn" onClick={filterTopratedRes}>Top Rated Restaurant</button>
-                <button className="reset"
+                {/* <div className="m-4 p-4">
+                <button className="px-4 py-2 bg-gray-100 rounded-lg" onClick={filterTopratedRes}>Top Rated Restaurant</button>
+                </div> */}
+                {/* <button className="reset"
                  onClick={reset}
-                 >Reset</button>
-                <input type="text"
+                 >Reset</button> */}
+                {/* <input type="text"
                 name=""
                 onChange={filterByKeyword}
-                />
+                /> */}
               </div>
-              <div className="res-container">
+              <div className="flex flex-wrap">
                 {filterRestaurant.map((restaurant) =>(
                 <Link
                 key={restaurant.info.id}
