@@ -1,15 +1,18 @@
 import RestrauntCard from "./RestrauntCard";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
+import UserContext from "../utils/UserContext";
 
 
 
 const Body = () => {
     const [listOfRestro, setListOfRestro] = useState([]);
     const [filterRestaurant, setFilterRestaurant] = useState([]);
-    const [searchText, setSearchText] = useState('')
+    const [searchText, setSearchText] = useState('');
+
+    console.log(listOfRestro);
 
     const filterTopratedRes = () => {
         const filterData = listOfRestro.filter((res) => res.info.avgRating >= 4.5);
@@ -19,6 +22,8 @@ const Body = () => {
     const reset = () => {
         setFilterRestaurant(listOfRestro);    
     }
+
+    const {loggedInUser, setUserName} = useContext(UserContext);
 
     // const filterByKeyword = (event) => {
     //     const keyword = event.target.value.toLowerCase(); 
@@ -79,6 +84,12 @@ const Body = () => {
                     <button className="px-4 py-2 m-2 bg-gray-100 rounded-lg"
                     onClick={reset}
                     >Reset</button>
+                    <input className="px-4 py-2 m-2 border border-solid border-black bg-slate-100" 
+                    value={loggedInUser}
+                    onChange={(e) => {
+                        setUserName(e.target.value);
+                    }}
+                    />
                 </div>
                 {/* <div className="m-4 p-4">
                 <button className="px-4 py-2 bg-gray-100 rounded-lg" onClick={filterTopratedRes}>Top Rated Restaurant</button>

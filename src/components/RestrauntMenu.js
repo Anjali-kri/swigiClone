@@ -2,49 +2,37 @@ import { useEffect, useState } from "react";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
 import useRestaurantMenu from "../utils/useRestaurantMenu";
+import RestaurantCatagory from "./RestaurantCatagory";
 
-const RestrauntMenu = () => {
-  // const [restaurant, setRestaurant] = useState([]);
-  // const [recomendedRestro, setRecomendedRestro] = useState([]);
+const RestrauntMenu = () => {  
   const {resId} = useParams();
-  // console.log(param.resId);
-
-  const {restaurant,recomendedRestro } = useRestaurantMenu(resId)
-
-  // useEffect(() => {
-  //   fetchMenu();
-  // }, []);
-
-  // const fetchMenu = async () => {
-  //   const data = await fetch(
-  //     "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9351929&lng=77.62448069999999&restaurantId=" +
-  //       param.resId +
-  //       "&catalog_qa=undefined&submitAction=ENTER"
-  //   );
-  //   const json = await data.json();
-  //   console.log(json);
-  //   setRestaurant(json?.data.cards[0]?.card?.card?.info);
-  //   setRecomendedRestro(
-  //     json.data.cards[2].groupedCard.cardGroupMap.REGULAR.cards[1].card.card
-  //       .itemCards
-  //   );
-  //   console.log(recomendedRestro, "recomend");
-  // };
-  // console.log(recomendedRestro, "recomend2");
-
+  const {restaurant, recomendedRestro, allData } = useRestaurantMenu(resId);  
+  const [showIndex, setShowIndex] = useState(0);
   if (!restaurant) return <Shimmer />;
 
+  // Check if allData.cards has at least 3 elements
+  if (!allData.cards || allData.cards.length < 3) {
+    console.error("Insufficient cards data in allData");
+    return null; // You can return something meaningful here
+  }
+
+  const catagory = allData.cards[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards?.filter((c) => { 
+    return c?.card?.card?.["@type"] === "type.googleapis.com/swiggy.presentation.food.v2.ItemCategory";
+  });
+  console.log(catagory, "recommended data");
+
   return (
-    <div className="menu">
-      {/* <h1>{menuData?.cards[0]?.card?.card?.info?.name}</h1> */}
-      <h1>{restaurant.name}</h1>
-      {/* <h5>{cuisines}- {costForTwoMessage}</h5>
-        <p>{avgRating}</p> */}
-      <ul>
-        {recomendedRestro && recomendedRestro.map((item) => (
-          <li key={item.card.info.id}>{item.card.info.name}</li>
-        ))}
-      </ul>
+    <div className="text-center">
+      <h1 className="text-2xl font-bold items-center m-6">{restaurant.name}</h1> 
+      <p className="font-bold text-lg">{restaurant.cuisines} - {restaurant.costForTwoMessage}</p>    
+      
+      {catagory.map((catagory, index) => {return <RestaurantCatagory 
+      key={catagory?.card?.title} 
+      data={catagory?.card?.card}
+      showItems={index === showIndex ? true : false}
+      setShowIndex={() => setShowIndex(index)}
+      />})}
+
     </div>
   );
 };
