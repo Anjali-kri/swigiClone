@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
@@ -15,17 +15,18 @@ import Cart from "./components/Cart";
 
 const About = lazy(() => import("./components/About"));
 const Applayout = () => {
-  const [userName, setUserName] = useState();
-useEffect(() => {
-  const data = {
-    name : "Anjali Singh"
-  }
-  setUserName(data.name);
-},[])
+  const {loggedInUser} = useContext(UserContext);
+  const [userName, setUserName] = useState(loggedInUser);
+// useEffect(() => {
+//   const data = {
+//     name : "Anjali Singh"
+//   }
+//   setUserName(data.name);
+// },[])
 
   return (
     <Provider store={appStore}>
-    <UserContext.Provider value={{loggedInUser: userName, setUserName}}>
+    <UserContext.Provider value={{loggedInUser: userName, setUserName }}>
     <div className="Header">
       <Header />
       <Outlet />

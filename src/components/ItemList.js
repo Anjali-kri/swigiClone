@@ -1,12 +1,13 @@
 import React from "react";
 import { CDN_URL } from "../utils/constants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../utils/CartSlice";
 
 const ItemList = ({ items }) => {
   // console.log(items, "items");
 
   const dispatch = useDispatch();
+  const saveItem = useSelector((store) => store.cart.item)
 
   const handleAddItem = (ele) => {
     // dispatch an action

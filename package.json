@@ -13,6 +13,10 @@
   "author": "anjali",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
+    "@testing-library/react": "^14.2.1",
+    "babel-jest": "^29.7.0",
     "parcel": "^2.11.0",
     "postcss": "^8.4.34",
     "process": "^0.11.10",

@@ -13,8 +13,9 @@ const Header = () => {
   const setOnlineStatus = useOnlineStatus();
 
   // selector
-  const cartItems = useSelector((store) => store.cart.items);
+  const cartItems = useSelector((store) => store.cart.items);  
   console.log(cartItems);
+  
     return (
       <div className="flex justify-between bg-pink-100 sm:bg-yellow-50 shadow-lg mb-2">
         <div className="logo-container">
